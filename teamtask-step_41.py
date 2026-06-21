@@ -27,3 +27,25 @@ def load_simple_tasks(filename):
 
 def filter_by_priority(tasks, priority):
     return [t for t in tasks if t['priority'].lower() == priority.lower()]
+
+# === Stage 41: Add plain text import for a simple line-based format ===
+# Project: TeamTask
+def parse_simple_task(text):
+    lines = text.strip().split('\n')
+    tasks = []
+    for line in lines:
+        if not line.startswith('#') and line.strip():
+            parts = line.split('|', 3)
+            if len(parts) >= 4:
+                task = {
+                    'id': int(parts[0]),
+                    'title': parts[1],
+                    'owner': parts[2].strip(),
+                    'priority': parts[3]
+                }
+                tasks.append(task)
+    return tasks
+
+def write_simple_task(text, filename='tasks.txt'):
+    with open(filename, 'w') as f:
+        f.write(text)
